@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Deliry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body class="admin-body admin-body--login">
+
+  <div class="login-wrap">
+    <div class="login-card">
+
+      <div class="login-logo">
+        <div class="login-logo__icon" id="loginIcon"></div>
+        <div class="login-logo__text">
+          <div class="login-logo__name" id="loginNome"></div>
+          <div class="login-logo__sub">Painel Administrativo</div>
+        </div>
+      </div>
+
+      <h1 class="login-title">Bem-vindo de volta</h1>
+      <p class="login-sub">Entre com sua senha para acessar o painel de controle</p>
+
+      <form class="login-form" id="loginForm">
+        <div class="field-group">
+          <label class="field-label">Senha de acesso</label>
+          <div class="pass-wrap">
+            <input class="field-input" type="password" id="loginPass"
+              placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="pass-toggle" id="passToggle" aria-label="Mostrar/ocultar senha">
+              <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="login-error" id="loginError" style="display:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Senha incorreta. Tente novamente.
+        </div>
+
+        <button type="submit" class="btn-primary login-btn">
+          Entrar no painel
+        </button>
+      </form>
+
+      <a class="login-back" href="../index.html">
+        ← Voltar ao site
+      </a>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script>
+    // Já logado → redireciona
+    if (sessionStorage.getItem("deliry_admin")) {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("loginIcon").textContent = CONFIG.emoji;
+    document.getElementById("loginNome").textContent = CONFIG.nome;
+
+    // Toggle senha
+    const passInput = document.getElementById("loginPass");
+    document.getElementById("passToggle").addEventListener("click", () => {
+      const isPass = passInput.type === "password";
+      passInput.type = isPass ? "text" : "password";
+      document.getElementById("eyeIcon").innerHTML = isPass
+        ? `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`
+        : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+    });
+
+    // Login
+    document.getElementById("loginForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const pass  = passInput.value;
+      const error = document.getElementById("loginError");
+      if (pass === CONFIG.adminSenha) {
+        sessionStorage.setItem("deliry_admin", "1");
+        window.location.href = "index.html";
+      } else {
+        error.style.display = "flex";
+        passInput.value = "";
+        passInput.focus();
+        passInput.classList.add("shake");
+        setTimeout(() => passInput.classList.remove("shake"), 500);
+      }
+    });
+  </script>
+
+  <style>
+    @keyframes shake {
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-6px)}
+      40%{transform:translateX(6px)}
+      60%{transform:translateX(-4px)}
+      80%{transform:translateX(4px)}
+    }
+    .shake { animation: shake .4s ease; }
+  </style>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Admin Deliry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body class="admin-body">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__logo" id="sLogo"></div>
+    <div>
+      <div class="sidebar__brand-name" id="sNome"></div>
+      <div class="sidebar__brand-tag">Painel Admin</div>
+    </div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <span class="sidebar__section-label">Menu</span>
+    <a class="sidebar__link active" href="index.html">
+      <span class="sidebar__link-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </span>
+      Dashboard
+    </a>
+    <a class="sidebar__link" href="pedidos.html">
+      <span class="sidebar__link-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="11" y2="16"/></svg>
+      </span>
+      Pedidos
+      <span class="sidebar__badge" id="sidebarPending" style="display:none">0</span>
+    </a>
+
+    <span class="sidebar__section-label">Cardápio</span>
+    <a class="sidebar__link" href="produtos.html">
+      <span class="sidebar__link-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      </span>
+      Produtos
+    </a>
+  </nav>
+
+  <div class="sidebar__footer">
+    <div class="sidebar__user" id="sidebarUser"></div>
+    <button class="sidebar__preview-btn" onclick="openPreview('index.html')">
+      <span class="sidebar__link-icon">📱</span>
+      Preview no celular
+    </button>
+    <a class="sidebar__link" href="../index.html" target="_blank">
+      <span class="sidebar__link-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </span>
+      Ver site ao vivo
+    </a>
+    <button class="sidebar__link sidebar__logout" id="btnLogout">
+      <span class="sidebar__link-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </span>
+      Sair da conta
+    </button>
+  </div>
+</aside>
+
+<!-- ===== TOPBAR ===== -->
+<div class="topbar">
+  <div class="topbar__left">
+    <div class="topbar__breadcrumb">
+      <span>Admin</span>
+      <span>›</span>
+      <span class="topbar__breadcrumb-current">Dashboard</span>
+    </div>
+  </div>
+  <div class="topbar__right">
+    <div class="topbar__icon-btn" id="notifBtn" title="Notificações">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="topbar__notif-dot" id="notifDot" style="display:none"></span>
+    </div>
+    <a class="topbar__site-btn" href="../index.html" target="_blank">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Ver site
+    </a>
+    <button class="topbar__preview" onclick="openPreview('index.html')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      Preview Mobile
+    </button>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<main class="admin-main">
+  <div class="admin-content">
+
+    <!-- Header -->
+    <div class="admin-header">
+      <div class="admin-header__left">
+        <h1 class="admin-header__title">Dashboard</h1>
+        <p class="admin-header__sub" id="dashDate"></p>
+      </div>
+      <div class="admin-header__actions">
+        <button class="admin-btn admin-btn--primary" onclick="window.location.href='pedidos.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+          Ver pedidos
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- Grid: pedidos recentes + atividade -->
+    <div class="admin-grid-2">
+
+      <!-- Pedidos recentes -->
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2>Pedidos recentes</h2>
+          <div class="admin-card__header-right">
+            <span class="t-muted" id="todayCount"></span>
+            <a class="admin-link" href="pedidos.html">Ver todos →</a>
+          </div>
+        </div>
+        <div class="admin-table-wrap" id="recentOrders">
+          <div class="empty-admin">
+            <div class="empty-admin__icon">📋</div>
+            <div class="empty-admin__title">Nenhum pedido ainda</div>
+            <div class="empty-admin__sub">Os pedidos aparecerão aqui assim que forem realizados pelo site</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atividade recente -->
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2>Atividade recente</h2>
+        </div>
+        <div class="activity-feed" id="activityFeed">
+          <div class="empty-admin" style="padding:32px">
+            <div class="empty-admin__sub">Nenhuma atividade registrada</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Produtos em destaque -->
+    <div class="admin-card">
+      <div class="admin-card__header">
+        <h2>Produtos do cardápio</h2>
+        <div class="admin-card__header-right">
+          <span class="t-muted" id="prodCount"></span>
+          <a class="admin-link" href="produtos.html">Gerenciar →</a>
+        </div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="prodTable"></table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ===== PREVIEW MOBILE ===== -->
+<div class="preview-overlay" id="previewOverlay">
+  <div class="preview-phone">
+    <iframe class="preview-phone__iframe" id="previewFrame" src="../index.html"></iframe>
+  </div>
+  <div class="preview-panel">
+    <div class="preview-panel__title">Páginas</div>
+    <button class="preview-nav-btn active" onclick="setPreview('../index.html', this)">🏠 Início</button>
+    <button class="preview-nav-btn" onclick="setPreview('../menu.html', this)">🍕 Cardápio</button>
+    <button class="preview-nav-btn" onclick="setPreview('../produto.html?id=1', this)">📄 Produto</button>
+    <button class="preview-nav-btn" onclick="setPreview('../checkout.html', this)">🛒 Carrinho</button>
+    <button class="preview-nav-btn" onclick="setPreview('../confirmacao.html', this)">✅ Confirmação</button>
+    <button class="preview-close" onclick="closePreview()">✕ &nbsp;Fechar preview</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../js/config.js"></script>
+<script src="../js/db.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+adminGuard();
+
+// --- Sidebar / topbar ---
+document.getElementById("sLogo").textContent     = CONFIG.emoji;
+document.getElementById("sNome").textContent     = CONFIG.nome;
+document.getElementById("sidebarUser").innerHTML = `
+  <div class="sidebar__user-avatar">A</div>
+  <div>
+    <div class="sidebar__user-name">Administrador</div>
+    <div class="sidebar__user-role">${CONFIG.nome}</div>
+  </div>`;
+
+const now   = new Date();
+document.getElementById("dashDate").textContent =
+  now.toLocaleDateString("pt-BR", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+
+// --- Dados ---
+const orders      = DB.getOrders();
+const todayStr    = now.toDateString();
+const todayOrders = orders.filter(o => new Date(o.data).toDateString() === todayStr);
+const pendentes   = orders.filter(o => o.status === "pendente");
+
+if (pendentes.length > 0) {
+  const badge = document.getElementById("sidebarPending");
+  badge.textContent    = pendentes.length;
+  badge.style.display  = "flex";
+  document.getElementById("notifDot").style.display = "block";
+}
+
+document.getElementById("todayCount").textContent =
+  todayOrders.length > 0 ? `${todayOrders.length} hoje` : "";
+
+// --- Stats ---
+const faturamentoHoje  = todayOrders.reduce((s,o)=>s+(o.total||0),0);
+const faturamentoTotal = orders.reduce((s,o)=>s+(o.total||0),0);
+const entreguesHoje    = todayOrders.filter(o=>o.status==="entregue").length;
+
+document.getElementById("statsGrid").innerHTML = `
+  <div class="stat-card stat-card--red">
+    <div class="stat-card__top">
+      <div class="stat-card__icon">💰</div>
+      <span class="stat-card__trend stat-card__trend--up">↑ hoje</span>
+    </div>
+    <div>
+      <div class="stat-card__val">${formatBRL(faturamentoHoje)}</div>
+      <div class="stat-card__label">Faturamento hoje</div>
+    </div>
+    <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:${Math.min(faturamentoHoje/500*100,100)}%"></div></div>
+  </div>
+
+  <div class="stat-card stat-card--yellow">
+    <div class="stat-card__top">
+      <div class="stat-card__icon">⏳</div>
+      <span class="stat-card__trend ${pendentes.length>0?'stat-card__trend--down':'stat-card__trend--neu'}">${pendentes.length>0?'⚡ atenção':'✓ ok'}</span>
+    </div>
+    <div>
+      <div class="stat-card__val">${pendentes.length}</div>
+      <div class="stat-card__label">Pedidos pendentes</div>
+    </div>
+    <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:${Math.min(pendentes.length/10*100,100)}%"></div></div>
+  </div>
+
+  <div class="stat-card stat-card--green">
+    <div class="stat-card__top">
+      <div class="stat-card__icon">✅</div>
+      <span class="stat-card__trend stat-card__trend--up">↑ hoje</span>
+    </div>
+    <div>
+      <div class="stat-card__val">${entreguesHoje}</div>
+      <div class="stat-card__label">Entregues hoje</div>
+    </div>
+    <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:${Math.min(entreguesHoje/20*100,100)}%"></div></div>
+  </div>
+
+  <div class="stat-card stat-card--blue">
+    <div class="stat-card__top">
+      <div class="stat-card__icon">📦</div>
+      <span class="stat-card__trend stat-card__trend--neu">total</span>
+    </div>
+    <div>
+      <div class="stat-card__val">${orders.length}</div>
+      <div class="stat-card__label">Total de pedidos</div>
+    </div>
+    <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:${Math.min(orders.length/100*100,100)}%"></div></div>
+  </div>
+`;
+
+// --- Pedidos recentes ---
+const recent = orders.slice(0, 8);
+if (recent.length > 0) {
+  document.getElementById("recentOrders").innerHTML = `
+    <table class="admin-table">
+      <thead><tr>
+        <th>#</th><th>Cliente</th><th>Itens</th>
+        <th>Total</th><th>Status</th><th>Horário</th>
+      </tr></thead>
+      <tbody>${recent.map(o=>`
+        <tr style="cursor:pointer" onclick="window.location.href='pedidos.html'">
+          <td class="t-muted t-nowrap">#${String(o.id).slice(-6)}</td>
+          <td>
+            <span class="t-strong">${o.cliente?.nome||"—"}</span>
+            <br><span class="t-muted">${o.cliente?.tel||""}</span>
+          </td>
+          <td>${(o.itens||[]).slice(0,2).map(i=>`${i.qty}x ${i.nome}`).join(", ")}${(o.itens||[]).length>2?` <span class="t-muted">+${(o.itens||[]).length-2}</span>`:""}</td>
+          <td><span style="color:var(--adm-primary);font-weight:800">${formatBRL(o.total||0)}</span></td>
+          <td>${statusBadge(o.status)}</td>
+          <td class="t-muted t-nowrap">${formatDate(o.data)}</td>
+        </tr>`).join("")}
+      </tbody>
+    </table>`;
+}
+
+// --- Atividade ---
+const feed     = document.getElementById("activityFeed");
+const statColors = { pendente:"#FFBE44", preparando:"#A78BFA", saiu:"#60A5FA", entregue:"#34D399", cancelado:"#F87171" };
+const activ    = orders.slice(0, 8);
+if (activ.length > 0) {
+  feed.innerHTML = `<div class="activity-feed">${activ.map((o,i)=>`
+    <div class="activity-item">
+      <div class="activity-item__dot" style="background:${statColors[o.status]||'#666'}"></div>
+      ${i < activ.length-1 ? '<div class="activity-item__line"></div>' : ""}
+      <div class="activity-item__body">
+        <div class="activity-item__text">
+          <strong>${o.cliente?.nome||"Cliente"}</strong> fez um pedido de <strong>${formatBRL(o.total||0)}</strong>
+        </div>
+        <div class="activity-item__time">${formatDate(o.data)}</div>
+      </div>
+      <div class="activity-item__badge">${statusBadge(o.status)}</div>
+    </div>`).join("")}
+  </div>`;
+}
+
+// --- Produtos ---
+const products = DB.getProducts();
+document.getElementById("prodCount").textContent = `${products.length} produtos`;
+const CATS = { tradicional:"Tradicional", especial:"Especial", brotinho:"Brotinho", bebidas:"Bebidas", sobremesa:"Sobremesa" };
+document.getElementById("prodTable").innerHTML = `
+  <thead><tr><th>Foto</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Destaque</th><th></th></tr></thead>
+  <tbody>${products.slice(0,6).map(p=>`
+    <tr>
+      <td>
+        <div class="produto-mini-img">
+          <div class="produto-mini-img-bg" style="background:${p.gradiente}"></div>
+          <img src="../${p.img}" onerror="this.style.display='none'" />
+        </div>
+      </td>
+      <td>
+        <span class="t-strong">${p.nome}</span>
+        ${p.badge?`<span class="status-badge status-badge--${p.badge==="hot"?"red":p.badge==="new"?"green":"yellow"}" style="margin-left:6px">${p.badgeTexto}</span>`:""}
+      </td>
+      <td class="t-muted">${CATS[p.cat]||p.cat}</td>
+      <td><span style="color:var(--adm-primary);font-weight:800">${formatBRL(p.preco)}</span></td>
+      <td>${p.destaque?'<span class="status-badge status-badge--green">✓ Sim</span>':'<span class="t-muted">—</span>'}</td>
+      <td><a class="admin-link" href="produtos.html">Editar</a></td>
+    </tr>`).join("")}
+  </tbody>`;
+
+// --- Preview ---
+function openPreview(page) {
+  document.getElementById("previewFrame").src = "../" + page;
+  document.getElementById("previewOverlay").classList.add("open");
+  const pages = ["index.html","menu.html","produto.html?id=1","checkout.html","confirmacao.html"];
+  document.querySelectorAll(".preview-nav-btn").forEach((b,i)=>b.classList.toggle("active", pages[i]==="../"+page||page===pages[i]));
+}
+function setPreview(url, btn) {
+  document.getElementById("previewFrame").src = url;
+  document.querySelectorAll(".preview-nav-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+function closePreview() { document.getElementById("previewOverlay").classList.remove("open"); }
+document.getElementById("previewOverlay").addEventListener("click", e=>{ if(e.target===e.currentTarget) closePreview(); });
+</script>
+</body>
+</html>

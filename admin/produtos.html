@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produtos — Admin</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <span class="sidebar__logo" id="sLogo"></span>
+      <div class="sidebar__brand-text">
+        <span class="sidebar__brand-name" id="sNome"></span>
+        <span class="sidebar__brand-tag">Painel Admin</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <span class="sidebar__section-label">Geral</span>
+      <a class="sidebar__link" href="index.html">
+        <span class="sidebar__link-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </span>
+        Dashboard
+      </a>
+      <a class="sidebar__link" href="pedidos.html">
+        <span class="sidebar__link-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        </span>
+        Pedidos
+        <span class="sidebar__badge" id="sidebarPending">0</span>
+      </a>
+
+      <span class="sidebar__section-label">Cardápio</span>
+      <a class="sidebar__link active" href="produtos.html">
+        <span class="sidebar__link-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M2 12h20"/></svg>
+        </span>
+        Produtos
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="sidebar__user">
+        <div class="sidebar__user-avatar">A</div>
+        <div>
+          <div class="sidebar__user-name">Administrador</div>
+          <div class="sidebar__user-role">Acesso total</div>
+        </div>
+      </div>
+      <button class="sidebar__preview-btn" onclick="openPreview()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Preview no celular
+      </button>
+      <a class="sidebar__link" href="../index.html" target="_blank">
+        <span class="sidebar__link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+        Ver site
+      </a>
+      <button class="sidebar__link sidebar__logout" id="btnLogout">
+        <span class="sidebar__link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar__left">
+      <div class="topbar__breadcrumb">
+        <span>Admin</span>
+        <span>/</span>
+        <span class="topbar__breadcrumb-current">Produtos</span>
+      </div>
+    </div>
+    <div class="topbar__right">
+      <button class="topbar__preview" onclick="openPreview()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Preview Mobile
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-content">
+
+      <div class="admin-header">
+        <div class="admin-header__left">
+          <h1 class="admin-header__title">Produtos</h1>
+          <p class="admin-header__sub" id="headerSub">Carregando…</p>
+        </div>
+        <div class="admin-header__actions">
+          <!-- Busca -->
+          <div class="admin-search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" placeholder="Buscar produto…" />
+          </div>
+          <!-- Filtro categoria -->
+          <select class="status-select" id="filterCat" style="max-width:160px">
+            <option value="all">Todas as cats.</option>
+            <option value="tradicional">🍕 Tradicional</option>
+            <option value="especial">⭐ Especial</option>
+            <option value="brotinho">🍕 Brotinho</option>
+            <option value="bebidas">🥤 Bebidas</option>
+            <option value="sobremesa">🍰 Sobremesa</option>
+          </select>
+          <button class="admin-btn admin-btn--primary" id="btnNovoProduto">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo produto
+          </button>
+          <button class="admin-btn" id="btnRestore">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
+            Restaurar padrão
+          </button>
+        </div>
+      </div>
+
+      <!-- TABELA -->
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2>Cardápio</h2>
+          <div class="admin-card__header-right">
+            <span class="t-muted" id="countLabel" style="font-size:12px"></span>
+          </div>
+        </div>
+        <div class="admin-table-wrap" id="produtosContainer"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL PRODUTO -->
+  <div class="modal-overlay" id="modalOverlay" style="display:none" onclick="closeModal()">
+    <div class="modal modal--lg" onclick="event.stopPropagation()">
+      <div class="modal__header">
+        <div>
+          <h3 id="modalTitle">Novo Produto</h3>
+          <div class="modal__header-sub">Preencha os dados do produto</div>
+        </div>
+        <button class="modal__close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal__body">
+        <form id="produtoForm">
+          <input type="hidden" id="fId" />
+
+          <div class="form-grid-2">
+            <!-- Nome -->
+            <div class="field-group form-span-2">
+              <label class="field-label">Nome do produto *</label>
+              <input class="field-input" type="text" id="fNome" placeholder="Ex: Calabresa Artesanal" required />
+            </div>
+            <!-- Descrição -->
+            <div class="field-group form-span-2">
+              <label class="field-label">Descrição *</label>
+              <textarea class="field-textarea" id="fDesc" placeholder="Descreva os ingredientes e diferenciais…" rows="2" required></textarea>
+            </div>
+            <!-- Preço base -->
+            <div class="field-group">
+              <label class="field-label">Preço base (R$) *</label>
+              <input class="field-input" type="number" id="fPreco" placeholder="45.90" step="0.01" min="0" required />
+            </div>
+            <!-- Preço antigo -->
+            <div class="field-group">
+              <label class="field-label">Preço antigo riscado (R$)</label>
+              <input class="field-input" type="number" id="fPrecoOld" placeholder="54.90 — deixe vazio para ocultar" step="0.01" min="0" />
+            </div>
+            <!-- Categoria -->
+            <div class="field-group">
+              <label class="field-label">Categoria *</label>
+              <select class="field-select" id="fCat">
+                <option value="tradicional">🍕 Tradicional</option>
+                <option value="especial">⭐ Especial</option>
+                <option value="brotinho">🍕 Brotinho</option>
+                <option value="bebidas">🥤 Bebidas</option>
+                <option value="sobremesa">🍰 Sobremesa</option>
+              </select>
+            </div>
+            <!-- Badge tipo -->
+            <div class="field-group">
+              <label class="field-label">Badge (destaque visual)</label>
+              <select class="field-select" id="fBadge">
+                <option value="">Nenhum</option>
+                <option value="hot">🔥 Hot</option>
+                <option value="new">✨ Novo</option>
+                <option value="best">⭐ Mais pedido</option>
+              </select>
+            </div>
+            <!-- Badge texto -->
+            <div class="field-group">
+              <label class="field-label">Texto do badge</label>
+              <input class="field-input" type="text" id="fBadgeTexto" placeholder="Ex: Top vendas" />
+            </div>
+            <!-- Foto -->
+            <div class="field-group">
+              <label class="field-label">Caminho da foto (pasta img/)</label>
+              <input class="field-input" type="text" id="fImg" placeholder="img/pizza-nome.jpg" />
+            </div>
+          </div>
+
+          <!-- Toggles -->
+          <div style="margin-top:20px;margin-bottom:4px;font-size:11px;font-weight:700;color:var(--adm-muted);text-transform:uppercase;letter-spacing:.8px">Opções</div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:4px 14px;margin-bottom:20px">
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Exibir na home (destaque)</div>
+                <div class="toggle-desc">Aparece na seção de destaques da página inicial</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="fDestaque" />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Permite escolha de tamanho</div>
+                <div class="toggle-desc">Cliente poderá escolher P / M / G / GG no pedido</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="fTemTamanho" />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Permite escolha de borda</div>
+                <div class="toggle-desc">Cliente verá opções de borda recheada no pedido</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="fTemBorda" />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="modal__footer" style="padding:0;border:none;margin-top:4px">
+            <button type="button" class="admin-btn" onclick="closeModal()">Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn--primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Salvar produto
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW MOBILE -->
+  <div class="preview-overlay" id="previewOverlay">
+    <div class="preview-phone">
+      <iframe class="preview-phone__iframe" id="previewFrame" src="../menu.html"></iframe>
+    </div>
+    <div class="preview-panel">
+      <div class="preview-panel__title">📱 Preview Mobile</div>
+      <button class="preview-nav-btn" onclick="setPreview('../index.html', this)">🏠 Início</button>
+      <button class="preview-nav-btn active" onclick="setPreview('../menu.html', this)">🍕 Cardápio</button>
+      <button class="preview-nav-btn" onclick="setPreview('../checkout.html', this)">🛒 Carrinho</button>
+      <button class="preview-close" onclick="closePreview()">✕ Fechar preview</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/db.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    adminGuard();
+    document.getElementById("sLogo").textContent = CONFIG.emoji;
+    document.getElementById("sNome").textContent  = CONFIG.nome;
+
+    const CATS = {
+      tradicional: "🍕 Tradicional",
+      especial:    "⭐ Especial",
+      brotinho:    "🍕 Brotinho",
+      bebidas:     "🥤 Bebidas",
+      sobremesa:   "🍰 Sobremesa",
+    };
+
+    let searchVal = "";
+    let filterCat = "all";
+
+    /* ── update sidebar pending count ── */
+    function updatePending() {
+      const p = DB.getOrders().filter(o => o.status === "pendente").length;
+      document.getElementById("sidebarPending").textContent = p;
+    }
+
+    /* ── render tabela ── */
+    function renderProdutos() {
+      updatePending();
+      let products = DB.getProducts();
+      if (filterCat !== "all") products = products.filter(p => p.cat === filterCat);
+      if (searchVal) {
+        const q = searchVal.toLowerCase();
+        products = products.filter(p =>
+          p.nome.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)
+        );
+      }
+
+      document.getElementById("headerSub").textContent =
+        `${DB.getProducts().length} produto${DB.getProducts().length !== 1 ? "s" : ""} no cardápio`;
+      document.getElementById("countLabel").textContent =
+        `${products.length} resultado${products.length !== 1 ? "s" : ""}`;
+
+      const container = document.getElementById("produtosContainer");
+
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div class="empty-admin">
+            <div class="empty-admin__icon">${searchVal || filterCat !== "all" ? "🔍" : "🍕"}</div>
+            <div class="empty-admin__title">${searchVal || filterCat !== "all" ? "Nenhum resultado" : "Nenhum produto"}</div>
+            <div class="empty-admin__sub">${searchVal || filterCat !== "all" ? "Tente outro filtro ou nome." : "Clique em \"Novo produto\" para adicionar o primeiro item ao cardápio."}</div>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="admin-table">
+          <thead><tr>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Badge</th>
+            <th style="text-align:center">Home</th>
+            <th style="text-align:center">Tamanho</th>
+            <th style="text-align:center">Borda</th>
+            <th>Ações</th>
+          </tr></thead>
+          <tbody>
+          ${products.map(p => `
+            <tr>
+              <!-- Produto (foto + nome + desc) -->
+              <td>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <div class="produto-mini-img">
+                    <div class="produto-mini-img-bg" style="background:${p.gradiente}"></div>
+                    <img src="../${p.img}" onerror="this.style.display='none'" alt="" />
+                  </div>
+                  <div>
+                    <div class="t-strong">${p.nome}</div>
+                    <div class="t-muted" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.desc}</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="t-muted">${CATS[p.cat] || p.cat}</span></td>
+              <td>
+                <div style="color:var(--adm-primary);font-weight:800;font-size:14px">${formatBRL(p.preco)}</div>
+                ${p.precoOld ? `<div class="t-muted" style="text-decoration:line-through;font-size:11px">${formatBRL(p.precoOld)}</div>` : ""}
+              </td>
+              <td>
+                ${p.badge
+                  ? `<span class="status-badge status-badge--${p.badge==="hot"?"red":p.badge==="new"?"green":"yellow"}">${p.badgeTexto || p.badge}</span>`
+                  : `<span class="t-muted">—</span>`}
+              </td>
+              <td style="text-align:center">${p.destaque    ? `<span style="font-size:16px">✅</span>` : `<span class="t-muted">—</span>`}</td>
+              <td style="text-align:center">${p.temTamanho  ? `<span style="font-size:16px">✅</span>` : `<span class="t-muted">—</span>`}</td>
+              <td style="text-align:center">${p.temBorda    ? `<span style="font-size:16px">✅</span>` : `<span class="t-muted">—</span>`}</td>
+              <td>
+                <div style="display:flex;gap:5px">
+                  <button class="admin-btn" onclick="editProduto(${p.id})">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    Editar
+                  </button>
+                  <button class="admin-btn admin-btn--danger" onclick="deleteProduto(${p.id})">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>`).join("")}
+          </tbody>
+        </table>`;
+    }
+
+    /* ── modal ── */
+    function openModal(product = null) {
+      document.getElementById("produtoForm").reset();
+      if (product) {
+        document.getElementById("modalTitle").textContent    = "Editar Produto";
+        document.getElementById("fId").value                 = product.id;
+        document.getElementById("fNome").value               = product.nome;
+        document.getElementById("fDesc").value               = product.desc;
+        document.getElementById("fPreco").value              = product.preco;
+        document.getElementById("fPrecoOld").value           = product.precoOld || "";
+        document.getElementById("fCat").value                = product.cat;
+        document.getElementById("fBadge").value              = product.badge || "";
+        document.getElementById("fBadgeTexto").value         = product.badgeTexto || "";
+        document.getElementById("fImg").value                = product.img || "";
+        document.getElementById("fDestaque").checked         = !!product.destaque;
+        document.getElementById("fTemTamanho").checked       = !!product.temTamanho;
+        document.getElementById("fTemBorda").checked         = !!product.temBorda;
+      } else {
+        document.getElementById("modalTitle").textContent = "Novo Produto";
+        document.getElementById("fId").value = "";
+      }
+      document.getElementById("modalOverlay").style.display = "flex";
+    }
+
+    function closeModal() { document.getElementById("modalOverlay").style.display = "none"; }
+
+    function editProduto(id) {
+      const p = DB.getProducts().find(p => p.id === id);
+      if (p) openModal(p);
+    }
+
+    function deleteProduto(id) {
+      if (!confirm("Excluir este produto? Esta ação não pode ser desfeita.")) return;
+      DB.saveProducts(DB.getProducts().filter(p => p.id !== id));
+      renderProdutos();
+      showToast("Produto excluído.");
+    }
+
+    document.getElementById("produtoForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const products = DB.getProducts();
+      const id       = parseInt(document.getElementById("fId").value) || null;
+      const data = {
+        id:         id || Date.now(),
+        nome:       document.getElementById("fNome").value.trim(),
+        desc:       document.getElementById("fDesc").value.trim(),
+        preco:      parseFloat(document.getElementById("fPreco").value),
+        precoOld:   parseFloat(document.getElementById("fPrecoOld").value) || null,
+        cat:        document.getElementById("fCat").value,
+        badge:      document.getElementById("fBadge").value || null,
+        badgeTexto: document.getElementById("fBadgeTexto").value.trim(),
+        img:        document.getElementById("fImg").value.trim(),
+        destaque:   document.getElementById("fDestaque").checked,
+        temTamanho: document.getElementById("fTemTamanho").checked,
+        temBorda:   document.getElementById("fTemBorda").checked,
+        gradiente:  "radial-gradient(circle at 35% 35%, rgba(255,255,255,.15) 0%, transparent 35%), radial-gradient(circle at 50% 50%, #F5C518 0%, #E8341C 35%, #922B00 60%, #3D1000 85%)",
+      };
+      if (id) {
+        const idx = products.findIndex(p => p.id === id);
+        if (idx > -1) products[idx] = { ...products[idx], ...data };
+      } else {
+        products.push(data);
+      }
+      DB.saveProducts(products);
+      closeModal();
+      renderProdutos();
+      showToast(id ? "✅ Produto atualizado!" : "✅ Produto criado!");
+    });
+
+    /* ── eventos ── */
+    document.getElementById("btnNovoProduto").addEventListener("click", () => openModal());
+
+    document.getElementById("btnRestore").addEventListener("click", () => {
+      if (confirm("Restaurar os produtos padrão? Todos os produtos editados serão perdidos.")) {
+        localStorage.removeItem("deliry_products");
+        renderProdutos();
+        showToast("Produtos restaurados ao padrão!");
+      }
+    });
+
+    document.getElementById("filterCat").addEventListener("change", e => {
+      filterCat = e.target.value; renderProdutos();
+    });
+
+    document.getElementById("searchInput").addEventListener("input", e => {
+      searchVal = e.target.value.trim(); renderProdutos();
+    });
+
+    document.getElementById("btnLogout").addEventListener("click", () => {
+      sessionStorage.removeItem("deliry_admin");
+      window.location.href = "login.html";
+    });
+
+    /* ── preview ── */
+    function openPreview() {
+      document.getElementById("previewFrame").src = "../menu.html";
+      document.getElementById("previewOverlay").classList.add("open");
+    }
+    function setPreview(url, btn) {
+      document.getElementById("previewFrame").src = url;
+      document.querySelectorAll(".preview-nav-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+    function closePreview() { document.getElementById("previewOverlay").classList.remove("open"); }
+    document.getElementById("previewOverlay").addEventListener("click", e => {
+      if (e.target === e.currentTarget) closePreview();
+    });
+
+    renderProdutos();
+  </script>
+</body>
+</html>
